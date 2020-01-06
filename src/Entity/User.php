@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * 
  */
 class User implements UserInterface
 {
@@ -23,7 +26,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
     private $roles = [];
 
@@ -36,22 +39,23 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $prenom;
+    private $prenom="";
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $nom="";
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isActif;
+    private $isActif=true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\role")
+     * @ORM\ManyToOne(targetEntity="App\Entity\role", inversedBy="users")
      */
     private $role;
+
 
     public function getId(): ?int
     {
@@ -82,7 +86,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -161,7 +165,6 @@ class User implements UserInterface
 
         return $this;
     }
-
     public function getRole(): ?role
     {
         return $this->role;
@@ -173,4 +176,6 @@ class User implements UserInterface
 
         return $this;
     }
+
+   
 }

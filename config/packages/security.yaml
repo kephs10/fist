@@ -1,21 +1,21 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: auto
+            algorithm: bcrypt
 
-   #  role_hierarchy:
-     #   ROLE_ADMIN:       ROLE_USER
-       # ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+    role_hierarchy:
+        ROLE_ADMIN:        ROLE_CAISSIER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    #https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
+         #used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: username
-        # used to reload user from session & other features (e.g. switch_user)
+         #used to reload user from session & other features (e.g. switch_user)
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
@@ -35,17 +35,15 @@ security:
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
             # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+             #switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-          # require ROLE_ADMIN for /admin*
-        - { path: '^/admin', roles: ROLE_ADMIN }
+          # matches /admin/admins/*
+        #- {  path : '^/api/roles' ,  roles : ROLE_SUPER_ADMIN }
 
-        # or require ROLE_ADMIN or IS_AUTHENTICATED_FULLY for /admin*
-        - { path: '^/admin', roles: [IS_AUTHENTICATED_FULLY, ROLE_ADMIN] }
-
-        # the 'path' value can be any valid regular expression
-        # (this one will match URLs like /api/post/7298 and /api/comment/528491)
-        - { path: ^/api/(post|comment)/\d+$, roles: ROLE_USER }
+        # matches /admin/users/* except for anything matching the above rule
+       # - {  path : '^/api/users' ,  roles : ROLE_ADMIN }
+         # matches /admin/* except for anything matching the above rule
+        #- {  path : '^/api/' ,  roles : ROLE_CAISSIER}
