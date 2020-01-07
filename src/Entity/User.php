@@ -4,12 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * 
  */
 class User implements UserInterface
 {
@@ -26,7 +23,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="json")
      */
     private $roles = [];
 
@@ -35,27 +32,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $prenom="";
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nom="";
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActif=true;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\role", inversedBy="users")
-     */
-    private $role;
-
 
     public function getId(): ?int
     {
@@ -86,7 +62,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        // $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -129,53 +105,4 @@ class User implements UserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): self
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(string $nom): self
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getIsActif(): ?bool
-    {
-        return $this->isActif;
-    }
-
-    public function setIsActif(bool $isActif): self
-    {
-        $this->isActif = $isActif;
-
-        return $this;
-    }
-    public function getRole(): ?role
-    {
-        return $this->role;
-    }
-
-    public function setRole(?role $role): self
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-   
 }
